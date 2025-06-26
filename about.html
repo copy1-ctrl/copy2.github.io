@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的空间-个人主页</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            color: white;
+            position: relative;
+        }
+
+        #meteorCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            display: block;
+        }
+
+        .content {
+            min-height: 100vh;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: transparent;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            margin: 20px auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-left: 50px;
+        }
+
+        #about {
+            display: flex;
+            flex-direction: row-reverse;
+            /* 反转排列顺序 */
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        #about>div {
+            flex: 1;
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .background.cover {
+            position: absolute;
+            bottom: -42%;
+            left: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+
+
+
+
+        .white-line {
+            width: 80px;
+            height: 3px;
+            background-color: white;
+            margin: 20px 0;
+            border: none;
+        }
+
+
+        /* 头部菜单样式 */
+        .tbcd {
+            background: rgba(15, 15, 25, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 15px 40px;
+            border-bottom: 1px solid rgba(80, 80, 120, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            margin-bottom: 40px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #8a2be2, #4b0082);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(to right, #8a2be2, #4b0082);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
+        }
+
+        .menu {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .menu li a {
+            text-decoration: none;
+            color: #d0d0e0;
+            font-size: 17px;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        /* 菜单项悬停效果 */
+        .menu li a:hover {
+            background: rgba(90, 90, 140, 0.2);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        /* 菜单项激活状态 */
+        .menu li a.active {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
+        }
+
+        .menu li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            border-radius: 2px;
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+
+        .menu li a:hover::after,
+        .menu li a.active::after {
+            width: 70%;
+        }
+    </style>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div class="background">
+        <canvas id="meteorCanvas"></canvas>
+    </div>
+
+    <div class="tbcd">
+        <nav>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <div class="logo-text">SpaceDesign</div>
+            </div>
+
+            <ul class="menu">
+                <li><a href="index.html"><i class="fas fa-home"></i>首页</a></li>
+                <li><a href="#" class="active"><i class="fas fa-users"></i>个人简介</a></li>
+                <li><a href="hobbies.html"><i class="fas fa-star"></i>兴趣爱好</a></li>
+                <li><a href="contact.html" onclick="return handleMenuClick(this, '联系我')"><i class="fas fa-phone"></i>联系我</a></li>
+            </ul>
+
+
+        </nav>
+    </div>
+
+    <div class="content">
+
+        <header>
+            <h1>欢迎来到我的空间</h1>
+            <p>软件实施 | 系统运维</p>
+        </header>
+
+        <section id="about">
+            <img src="images/个人头像.png" alt="个人头像" class="profile-img">
+            <div>
+                <h2>
+                    在追逐梦想的路上，风雨兼程，只因心中有光，脚下有路。
+                    <hr class="white-line">
+                </h2>
+                <p>你好，我叫胡振立，正在从事软件实施，系统运维等相关工作，拥有2年左右相关经验。<br>
+                    基于本人对互联网领域持续的关注与实践，以及自身所掌握的相关技能，深刻认同该行业发展趋势与社会价值，<br>期待在这个行业的进程和发展中，继续学习和提升自己。
+                </p>
+            </div>
+        </section>
+
+        <section id="projects">
+            <h2>我的作品</h2>
+            <div class="project-list">
+                <div class="album">
+                    <div class="photo"><img src="images/1.png" alt="照片1"></div>
+                    <div class="photo"><img src="images/2.png" alt="照片2"></div>
+                    <div class="photo"><img src="images/3.png" alt="照片3"></div>
+                    <div class="photo"><img src="images/4.png" alt="照片4"></div>
+                    <div class="photo"><img src="images/5.png" alt="照片5"></div>
+                    <div class="photo"><img src="images/6.png" alt="照片6"></div>
+                </div>
+                <!-- 项目内容 -->
+            </div>
+        </section>
+
+
+    </div>
+    <script src="js/canvasScript.js"></script>
+</body>
+
+</html>

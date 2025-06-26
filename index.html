@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的空间-首页</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      color: white;
+      position: relative;
+    }
+
+    #meteorCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      display: block;
+    }
+
+    .cover {
+      position: absolute;
+      top: 100px;
+      left: 20px;
+      color: #7db9de;
+      font-family: Arial;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .content {
+      min-height: 100vh;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      background-color: transparent;
+    }
+
+    header {
+      text-align: center;
+      padding: 3rem 0;
+    }
+
+    section {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .background.cover {
+      position: absolute;
+      bottom: -42%;
+      left: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+
+    .intro {
+      color: #fff;
+      height: 100vh;
+      padding: 0;
+      position: relative;
+    }
+
+    .hello {
+      position: absolute;
+      bottom: 20%;
+      left: 0;
+      top: 200px;
+    }
+
+    .h1 {
+      font-size: 42px;
+    }
+
+    .hello h1 {
+      font-size: 32px;
+      letter-spacing: .5em;
+    }
+
+    .hello h2 {
+      padding-top: .6em;
+    }
+
+    .hello .circle span {
+      display: inline-block;
+      width: 13px;
+      height: 13px;
+      background-color: #fff;
+      border-radius: 100%;
+      margin-right: 5px;
+    }
+
+    .hello .circle span:first-child {
+      background-color: #ff493f;
+    }
+
+    .hello .circle span:nth-child(2) {
+      background-color: #f7c900;
+    }
+
+    .hello .circle span:nth-child(3) {
+      background-color: #00ff37;
+    }
+
+    .white-line {
+      width: 80px;
+      height: 3px;
+      background-color: white;
+      margin: 20px 0;
+      border: none;
+    }
+
+
+    /* 头部菜单样式 */
+    .tbcd {
+      background: rgba(15, 15, 25, 0.85);
+      backdrop-filter: blur(10px);
+      padding: 15px 40px;
+      border-bottom: 1px solid rgba(80, 80, 120, 0.3);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      margin-bottom: 40px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #8a2be2, #4b0082);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(to right, #8a2be2, #4b0082);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
+    }
+
+    .menu {
+      display: flex;
+      list-style: none;
+      gap: 25px;
+    }
+
+    .menu li a {
+      text-decoration: none;
+      color: #d0d0e0;
+      font-size: 17px;
+      font-weight: 500;
+      padding: 8px 15px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    /* 菜单项悬停效果 */
+    .menu li a:hover {
+      background: rgba(90, 90, 140, 0.2);
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    /* 菜单项激活状态 */
+    .menu li a.active {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+      box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
+    }
+
+    .menu li a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6a11cb, #2575fc);
+      border-radius: 2px;
+      transform: translateX(-50%);
+      transition: width 0.3s ease;
+    }
+
+    .menu li a:hover::after,
+    .menu li a.active::after {
+      width: 70%;
+    }
+  </style>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <div class="background">
+
+    <canvas id="meteorCanvas"></canvas>
+    <div class="cover">←→方向键控制飞船移动 | ↑加速</div>
+  </div>
+
+  <div class="tbcd">
+    <nav>
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-rocket"></i>
+        </div>
+        <div class="logo-text">SpaceDesign</div>
+      </div>
+
+      <ul class="menu">
+        <li>
+          <a href="#" class="active"><i class="fas fa-home"></i>首页</a>
+        </li>
+        <li>
+          <a href="about.html" onclick="return handleMenuClick(this, '个人简介')"><i class="fas fa-users"></i>个人简介</a>
+        </li>
+        <li><a href="hobbies.html"><i class="fas fa-star"></i>兴趣爱好</a></li>
+        <li><a href="contact.html"><i class="fas fa-phone"></i>联系我</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="content">
+    <div class="ch intro">
+      <div class="hello">
+        <h1 id="slogan">夜幕低垂，星辰闪烁，那是一片浩瀚的画卷，铺展在无垠的宇宙之中。</h1>
+        <h2>
+          <div class="circle">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          "我叫小胡，欢迎来到我的网页"
+        </h2>
+      </div>
+    </div>
+
+  </div>
+  <script>
+    // 添加菜单交互效果
+    function handleMenuClick(link, pageName) {
+      // 移除所有active类
+      document.querySelectorAll('.menu li a').forEach(item => {
+        item.classList.remove('active');
+      });
+      // 为当前项添加active类（这里不需要，因为页面会跳转）
+      // 但为了保持一致性，我们可以保留这个逻辑（尽管它不会执行，因为页面已经跳转）
+      // link.classList.add('active'); // 这行代码在跳转后不会执行
+
+      // 记录用户点击的页面名称（可选，用于分析或日志记录）
+      console.log(`User clicked on: ${pageName}`);
+
+      // 返回true以允许默认跳转行为
+      return true;
+    }
+
+    // 添加按钮交互效果
+
+  </script>
+  <script src="js/canvasScript1.js"></script>
+</body>
+
+</html>

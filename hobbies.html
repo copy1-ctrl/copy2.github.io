@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>兴趣宇宙 | 2025</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8a2be2;
+            --secondary: #4025a8;
+            --accent: #00b4db;
+        }
+
+        /* * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        } */
+
+        /* body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f3460 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        } */
+
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            color: white;
+            position: relative;
+        }
+
+        /* 动态粒子背景 */
+        /* #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        } */
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        header {
+            text-align: center;
+            padding: 10px 20px 15px;
+            position: relative;
+        }
+
+        .gradient-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            background: linear-gradient(to right, var(--primary), var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(138, 43, 226, 0.4);
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.7;
+            opacity: 0.9;
+        }
+
+        /* 导航指示器 */
+        .nav-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active {
+            background: var(--accent);
+            transform: scale(1.3);
+        }
+
+        .hobbies-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 35px;
+        }
+
+        /* 磨砂玻璃卡片 */
+        .hobby-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow:
+                0 15px 35px rgba(0, 0, 0, 0.25),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+        }
+
+        .hobby-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow:
+                0 25px 50px rgba(138, 43, 226, 0.3),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            border-color: rgba(138, 43, 226, 0.3);
+        }
+
+        .card-media {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .hobby-card:hover .card-media img {
+            transform: scale(1.05);
+        }
+
+        .card-content {
+            padding: 28px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .icon-wrapper {
+            width: 55px;
+            height: 55px;
+            background: rgba(138, 43, 226, 0.15);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 18px;
+        }
+
+        .hobby-icon {
+            font-size: 1.8rem;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hobby-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+        }
+
+        .hobby-desc {
+            line-height: 1.8;
+            color: #cbd5e1;
+            margin-bottom: 25px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .tag {
+            background: rgba(64, 37, 168, 0.3);
+            color: #d0b3ff;
+            padding: 7px 18px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(138, 43, 226, 0.2);
+        }
+
+        footer {
+            text-align: center;
+            padding: 50px 20px 30px;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* 响应式设计 */
+        /* @media (max-width: 900px) {
+            .hobbies-container {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        } */
+
+        /* 动画效果 */
+        /* @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        } */
+
+        /* 头部菜单样式 */
+        .tbcd {
+            background: rgba(15, 15, 25, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 15px 40px;
+            border-bottom: 1px solid rgba(80, 80, 120, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            margin-bottom: 10px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #8a2be2, #4b0082);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(to right, #8a2be2, #4b0082);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
+        }
+
+        .menu {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .menu li a {
+            text-decoration: none;
+            color: #d0d0e0;
+            font-size: 17px;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        /* 菜单项悬停效果 */
+        .menu li a:hover {
+            background: rgba(90, 90, 140, 0.2);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        /* 菜单项激活状态 */
+        .menu li a.active {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
+        }
+
+        .menu li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            border-radius: 2px;
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+
+        .menu li a:hover::after,
+        .menu li a.active::after {
+            width: 70%;
+        }
+
+        #meteorCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            display: block;
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 粒子背景容器 -->
+    <!-- <div id="particles-js"></div> -->
+
+    <div class="background">
+
+        <canvas id="meteorCanvas"></canvas>
+        <!-- <div class="cover">←→方向键控制飞船移动 | ↑加速</div> -->
+    </div>
+
+    <div class="tbcd">
+        <nav>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <div class="logo-text">SpaceDesign</div>
+            </div>
+
+            <ul class="menu">
+                <li>
+                    <a href="index.html"><i class="fas fa-home"></i>首页</a>
+                </li>
+                <li>
+                    <a href="about.html" onclick="return handleMenuClick(this, '个人简介')"><i
+                            class="fas fa-users"></i>个人简介</a>
+                </li>
+                <li><a href="#" class="active"><i class="fas fa-star"></i>兴趣爱好</a></li>
+                <li><a href="contact.html"><i class="fas fa-phone"></i>联系我</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1 class="gradient-title">探索我的兴趣宇宙</h1>
+            <p class="subtitle">每个爱好都是通向新维度的星门，在这里分享我的热爱与探索旅程</p>
+
+            <div class="nav-indicators">
+                <div class="indicator active"></div>
+                <div class="indicator"></div>
+                <div class="indicator"></div>
+            </div>
+        </header>
+
+        <div class="hobbies-container">
+            <!-- 摄影卡片 -->
+            <div class="hobby-card">
+                <div class="card-media">
+                    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        alt="摄影">
+                </div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-camera hobby-icon"></i>
+                        </div>
+                        <h2 class="hobby-title">光影艺术</h2>
+                    </div>
+                    <p class="hobby-desc">用镜头捕捉时间的流动，擅长长曝光与城市探索。通过光影重构现实，将平凡场景转化为超现实视觉叙事。</p>
+                    <div class="tags">
+                        <span class="tag">城市探索</span>
+                        <span class="tag">光影重构</span>
+                        <span class="tag">AI后期</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 音乐卡片 -->
+            <div class="hobby-card">
+                <div class="card-media">
+                    <img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        alt="音乐">
+                </div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-music hobby-icon"></i>
+                        </div>
+                        <h2 class="hobby-title">声波创造</h2>
+                    </div>
+                    <p class="hobby-desc">融合传统乐器与数字音效，创作沉浸式音乐体验。擅长环境音乐与节奏实验，探索声音的情感维度。</p>
+                    <div class="tags">
+                        <span class="tag">数字合成</span>
+                        <span class="tag">氛围音乐</span>
+                        <span class="tag">现场即兴</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 科技卡片 -->
+            <div class="hobby-card">
+                <div class="card-media">
+                    <img src="https://images.unsplash.com/photo-1535223289827-42f1e9919769?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        alt="科技">
+                </div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-microchip hobby-icon"></i>
+                        </div>
+                        <h2 class="hobby-title">前沿科技</h2>
+                    </div>
+                    <p class="hobby-desc">构建智能交互装置与生成艺术系统。探索神经界面与量子计算，创造人机协同的未来体验。</p>
+                    <div class="tags">
+                        <span class="tag">交互装置</span>
+                        <span class="tag">生成艺术</span>
+                        <span class="tag">量子编程</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 自然探索卡片 -->
+            <div class="hobby-card">
+                <div class="card-media">
+                    <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        alt="自然探索">
+                </div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-mountain hobby-icon"></i>
+                        </div>
+                        <h2 class="hobby-title">生态漫游</h2>
+                    </div>
+                    <p class="hobby-desc">徒步原始秘境与生物追踪，用地理数据绘制生态图谱。专注濒危物种保护与生态修复技术实践。</p>
+                    <div class="tags">
+                        <span class="tag">野外勘测</span>
+                        <span class="tag">物种图谱</span>
+                        <span class="tag">生态修复</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <footer>
+            <p>© 2025 兴趣宇宙 | 探索 · 创造 · 共生</p>
+        </footer>
+    </div>
+
+    <!-- 粒子效果库 -->
+    <!-- <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> -->
+
+    <!-- <script>
+        // 粒子背景初始化
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 70, density: { enable: true, value_area: 800 } },
+                color: { value: "#8a2be2" },
+                shape: { type: "circle" },
+                opacity: { value: 0.3, random: true },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#4b0082",
+                    opacity: 0.1,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 1,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out"
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "repulse" },
+                    onclick: { enable: true, mode: "push" },
+                    resize: true
+                }
+            }
+        });
+
+        // 卡片悬浮动画
+        document.querySelectorAll('.hobby-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-15px) scale(1.02)';
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script> -->
+    <script src="js/canvasScript.js">
+        // 卡片悬浮动画
+        document.querySelectorAll('.hobby-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-15px) scale(1.02)';
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+
+</html>
